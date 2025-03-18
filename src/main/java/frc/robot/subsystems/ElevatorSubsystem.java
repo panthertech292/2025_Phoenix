@@ -81,12 +81,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     return (Math.abs(getElevatorHeight()-elevatorSetHeight) < .05);
   }
   public double getElevatorHeight(){ //Gets elevator height in inches
-    double height = elevatorCANdi.getPWM1Position().getValueAsDouble() * ElevatorConstants.kElevatorGearDiameter * Math.PI ;
+    return elevatorCANdi.getPWM1Position().getValueAsDouble() * ElevatorConstants.kElevatorGearDiameter * Math.PI ;
+  }
+  private void alertElevatorHeight(){
+    double height = getElevatorHeight();
     if(height < -1 || height > 30){
       badHeightReadingAlert = new Alert("CRITICAL: Elevator height reported out of bounds! Height: " + height + " Inches", AlertType.kError);
       badHeightReadingAlert.set(true);
     }
-    return height;
   }
   public boolean isElevatorMaxHeight(){
     return getElevatorHeight() > ElevatorConstants.kElevatorMaxHeight;
@@ -144,5 +146,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    alertElevatorHeight();
   }
 }
