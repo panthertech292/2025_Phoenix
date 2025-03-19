@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -18,6 +19,7 @@ import com.ctre.phoenix6.signals.S1FloatStateValue;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ElevatorConstants.ElevatorHeights;
@@ -76,6 +78,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     CANdiConfig.DigitalInputs.S1FloatState = S1FloatStateValue.FloatDetect;
     CANdiConfig.PWM1.AbsoluteSensorOffset = ElevatorConstants.kElevatorEncoderOffset;
     elevatorCANdi.getConfigurator().apply(CANdiConfig);
+    //BaseStatusSignal.setUpdateFrequencyForAll(100, elevatorCANdi.getPWM1Position());
   }
   public boolean isElevatorAtHeight(){
     return (Math.abs(getElevatorHeight()-elevatorSetHeight) < .05);
@@ -102,7 +105,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     .withLimitReverseMotion(isElevatorMinHeight()));
   }
   public void setElevatorHeight(double height){
-    if(height >= ElevatorConstants.kElevatorMinHeight){
+    if(height >= ElevatorConstants.kElevatorMinHeight && height < ElevatorConstants.kElevatorMaxHeight){
       double rots = height / ElevatorConstants.kElevatorGearDiameter / Math.PI; //convert height to motor rotations
       leftElevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(rots)
       .withLimitForwardMotion(isElevatorMaxHeight())
@@ -113,6 +116,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   public void runElevatorFromSetHeight(){
     setElevatorHeight(elevatorSetHeight);
+  }
+  public void setHeightToCurrentPosition(){
+    elevatorSetHeight = getElevatorHeight();
   }
   public void setElevatorSetPoint(ElevatorHeights elevatorSetPoint){
     switch(elevatorSetPoint){
@@ -146,6 +152,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    alertElevatorHeight();
+    //alertElevatorHeight();
+    SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
+    SmartDashboard.putNumber("Elevator Rotation", elevatorCANdi.getPWM1Position().getValueAsDouble());
+    SmartDashboard.putNumber("Elevator Voltage", leftElevatorMotor.getMotorVoltage().getValueAsDouble());
   }
 }

@@ -14,23 +14,24 @@ public class Constants {
         //Ratios & Offsets
         public static final double kElevatorGearDiameter = 2.551;
         public static final int kIntEncoderToExtRatio = 64;
-        public static final double kElevatorEncoderOffset = 0; //TODO: Find this
+        public static final double kElevatorEncoderOffset = -0.269;
         //Current Limits
         public static final double kElevatorStatorCurrentLimit = 20; //TODO: Tune this
         //Limits
-        public static final double kElevatorMaxHeight = 23.5; //TODO: Find this
+        public static final double kElevatorMaxHeight = 26.5;
         public static final double kElevatorMinHeight = 0.25;
         //Heights
-        public static final double kElevatorL1Height = 0; //TODO: Find this
-        public static final double kElevatorL2Height = 0; //TODO: Find this
-        public static final double kElevatorL3Height = 0; //TODO: Find this
-        public static final double kElevatorL4Height = 0; //TODO: Find this
+        public static final double kElevatorL1Height = 0.25; //TODO: Find this
+        public static final double kElevatorL2Height = 5.54;
+        public static final double kElevatorL3Height = 13.66;
+        public static final double kElevatorL4Height = 26.04;
         public static final double kElevatorAlgeeLowHeight = 0; //TODO: Find this
         public static final double kElevatorAlgeeHighHeight = 0; //TODO: Find this
-        public static final double kElevatorLoadHeight = 0; //TODO: Find this
+        public static final double kElevatorLoadHeight = 0.30; //TODO: Find this
     }
     public static class ShooterConstants{
-
+        public static final int kUpperRollerMotor = 32;
+        public static final int kLowerRollerMotor = 33;
     }
     public static class ClimberConstants{
         //Devices
