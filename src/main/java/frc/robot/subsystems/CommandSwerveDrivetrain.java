@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -10,13 +9,16 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -30,8 +32,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -49,7 +50,6 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
-    private StructArrayPublisher<Pose2d> arrayPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("VisionPoses", Pose2d.struct).publish();
     private PhotonCamera leftCamera;
     private PhotonCamera rightCamera;
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -57,7 +57,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private PhotonPoseEstimator photonPoseEstimatorFront;
     private Pose2d PhotonPoseBack = new Pose2d();
     private Pose2d PhotonPoseFront = new Pose2d();
-    private Matrix<N3, N1> curStdDevs;
     private final Field2d m_field = new Field2d(); //TODO: For testing
 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
@@ -70,6 +69,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
     /* Keep track if we've ever applied the operator perspective before or not */
     private boolean m_hasAppliedOperatorPerspective = false;
+
+    /** Swerve request to apply during robot-centric path following */
+    private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
     /* Swerve requests to apply during SysId characterization */
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
@@ -157,6 +159,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         configPhotonVision();
+        configureAutoBuilder();
     }
 
     /**
@@ -182,6 +185,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         configPhotonVision();
+        configureAutoBuilder();
     }
 
     /**
@@ -215,6 +219,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             startSimThread();
         }
         configPhotonVision();
+        configureAutoBuilder();
     }
 
     /**
@@ -248,6 +253,44 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
+    private void configureAutoBuilder() {
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                () -> getState().Pose,   // Supplier of current robot pose
+                this::resetPose,         // Consumer for seeding pose against auto
+                () -> getState().Speeds, // Supplier of current robot speeds
+                // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                (speeds, feedforwards) -> setControl(
+                    m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                new PPHolonomicDriveController(
+                    // PID constants for translation
+                    new PIDConstants(10, 0, 0),
+                    // PID constants for rotation
+                    new PIDConstants(7, 0, 0)
+                ),
+                config,
+                // Assume the path needs to be flipped for Red vs Blue, this is normally the case
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                this // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
+        }
+    }
+    public Command driveToPose(Pose2d pose){
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(2.2352, 4.0,Units.degreesToRadians(360) , Units.degreesToRadians(720)); //TODO: CONFIG THIS
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(pose, constraints,0.0);
+    }
+    public void poseToPhoton(){
+        System.out.println("Resetting pose!");
+        resetPose(PhotonPoseFront);
+    }
     public void configPhotonVision(){
         //62.455 from horizontal
         //64.92 for X ROTATE FROM 0 POINTING FORWARD
@@ -263,7 +306,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseBack() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : leftCamera.getAllUnreadResults()) {
-            if(change.getBestTarget() != null){
+            if(change.hasTargets()){
                 if(change.getBestTarget().poseAmbiguity < .1){
                     visionEst = photonPoseEstimatorBack.update(change);
                     //photonPoseEstimatorLeft.addHeadingData(change.getTimestampSeconds(), getState().Pose.getRotation());
@@ -276,7 +319,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFront() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : rightCamera.getAllUnreadResults()) {
-            if(change.getBestTarget() != null){
+            if(change.hasTargets()){
                 if(change.getBestTarget().poseAmbiguity < .1){
                     visionEst = photonPoseEstimatorFront.update(change);
                     //photonPoseEstimatorLeft.addHeadingData(change.getTimestampSeconds(), getState().Pose.getRotation());

@@ -5,8 +5,15 @@
 package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -35,17 +42,26 @@ public class RobotContainer {
   //Drive Config
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+  private final SendableChooser<Command> autoChooser;
+
   public RobotContainer() {
     CameraServer.startAutomaticCapture();
     configureBindings();
+    registerCommands();
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto", autoChooser);
     m_ElevatorSubsystem.setDefaultCommand(new DefaultElevator(m_ElevatorSubsystem, drivetrain));
+  }
+
+  private void registerCommands(){
+    NamedCommands.registerCommand("Reset to Photon", drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
   }
 
   private void configureBindings() {
@@ -61,6 +77,10 @@ public class RobotContainer {
     drive.withVelocityX(-driverController.getLeftY() * MaxSpeed*0.15) // Drive forward with negative Y (forward)
     .withVelocityY(-driverController.getLeftX() * MaxSpeed*0.15) // Drive left with negative X (left)
     .withRotationalRate(-driverController.getRightX() * MaxAngularRate*0.15)));
+
+    driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
+
+    driverController.a().whileTrue(drivetrain.driveToPose(new Pose2d(13.71, 5.17, new Rotation2d(Units.degreesToRadians(-30)))));
     //Operator Controller
     operatorController.y().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L4), m_ElevatorSubsystem));
     operatorController.x().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L2), m_ElevatorSubsystem));
@@ -75,6 +95,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
   }
 }
