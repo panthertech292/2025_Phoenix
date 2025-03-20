@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 public class Constants {
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
@@ -36,5 +38,27 @@ public class Constants {
     public static class ClimberConstants{
         //Devices
         public static final int kClimberMotor = 40;
+    }
+    public static class PositionConstants{
+        public static class coralReefPositions{
+            public static final Pose2d alpha = new Pose2d();
+            public static final Pose2d bravo = new Pose2d();
+            public static final Pose2d charlie = new Pose2d();
+            public static final Pose2d delta = new Pose2d();
+            public static final Pose2d echo = new Pose2d();
+            public static final Pose2d foxtrot = new Pose2d();
+            public static final Pose2d golf = new Pose2d();
+            public static final Pose2d hotel = new Pose2d();
+            public static final Pose2d india = new Pose2d();
+            public static final Pose2d juliett = new Pose2d();
+            public static final Pose2d kilo = new Pose2d();
+            public static final Pose2d lima = new Pose2d();
+        }
+        public static class coralStationPositions{
+            public static final Pose2d closeUpper = new Pose2d();
+            public static final Pose2d farUpper = new Pose2d();
+            public static final Pose2d closeLow = new Pose2d();
+            public static final Pose2d farLow = new Pose2d();
+        }
     }
 }
