@@ -45,7 +45,7 @@ public class RobotContainer {
   public RobotContainer() {
     CameraServer.startAutomaticCapture();
     configureBindings();
-    m_ElevatorSubsystem.setDefaultCommand(new DefaultElevator(m_ElevatorSubsystem));
+    m_ElevatorSubsystem.setDefaultCommand(new DefaultElevator(m_ElevatorSubsystem, drivetrain));
   }
 
   private void configureBindings() {

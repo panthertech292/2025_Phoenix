@@ -2,7 +2,15 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
@@ -10,15 +18,26 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -30,6 +49,17 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    private StructArrayPublisher<Pose2d> arrayPublisher = NetworkTableInstance.getDefault().getStructArrayTopic("VisionPoses", Pose2d.struct).publish();
+    private PhotonCamera leftCamera;
+    private PhotonCamera rightCamera;
+    private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+    private PhotonPoseEstimator photonPoseEstimatorBack;
+    private PhotonPoseEstimator photonPoseEstimatorFront;
+    private Pose2d PhotonPoseBack = new Pose2d();
+    private Pose2d PhotonPoseFront = new Pose2d();
+    private Matrix<N3, N1> curStdDevs;
+    private final Field2d m_field = new Field2d(); //TODO: For testing
+
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -126,6 +156,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        configPhotonVision();
     }
 
     /**
@@ -150,6 +181,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        configPhotonVision();
     }
 
     /**
@@ -182,6 +214,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        configPhotonVision();
     }
 
     /**
@@ -215,9 +248,67 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
+    public void configPhotonVision(){
+        //62.455 from horizontal
+        //64.92 for X ROTATE FROM 0 POINTING FORWARD
+        leftCamera = new PhotonCamera("OV9281-LEFT");
+        rightCamera = new PhotonCamera("OV9281-RIGHT");
+        photonPoseEstimatorBack = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.29094176, -0.30996128, 0.15571724), new Rotation3d(0,Units.degreesToRadians(-25),Units.degreesToRadians(-60))));
+        photonPoseEstimatorBack.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        photonPoseEstimatorFront = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0.2777998, -0.31421832, 0.15571724), new Rotation3d(0,Units.degreesToRadians(-25),Units.degreesToRadians(-120))));
+        photonPoseEstimatorFront.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        SmartDashboard.putData("FieldMap!", m_field);
+    }
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseBack() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        for (var change : leftCamera.getAllUnreadResults()) {
+            if(change.getBestTarget() != null){
+                if(change.getBestTarget().poseAmbiguity < .1){
+                    visionEst = photonPoseEstimatorBack.update(change);
+                    //photonPoseEstimatorLeft.addHeadingData(change.getTimestampSeconds(), getState().Pose.getRotation());
+                    //updateEstimationStdDevs(visionEst, change.getTargets());
+                }
+            }
+        }
+        return visionEst;
+    }
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFront() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        for (var change : rightCamera.getAllUnreadResults()) {
+            if(change.getBestTarget() != null){
+                if(change.getBestTarget().poseAmbiguity < .1){
+                    visionEst = photonPoseEstimatorFront.update(change);
+                    //photonPoseEstimatorLeft.addHeadingData(change.getTimestampSeconds(), getState().Pose.getRotation());
+                    //updateEstimationStdDevs(visionEst, change.getTargets());
+                }
+            }
+        }
+        return visionEst;
+    }
+    private void updatePhotonOdometry(){
+        var visionEstBack = getEstimatedGlobalPoseBack();
+        visionEstBack.ifPresent(est -> {addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, VecBuilder.fill(.7,.7,9999999));});
+        visionEstBack.ifPresent(est -> {PhotonPoseBack = est.estimatedPose.toPose2d();});
+        var visionEstFront = getEstimatedGlobalPoseFront();
+        visionEstFront.ifPresent(est -> {addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, VecBuilder.fill(.7,.7,9999999));});
+        visionEstFront.ifPresent(estFront -> {PhotonPoseFront = estFront.estimatedPose.toPose2d();});
+    }
+
 
     @Override
     public void periodic() {
+        //System.out.println("PHOTON LEFT ANGLE: " + PhotonPoseLeft.getRotation().getDegrees() + PhotonPoseLeft.getX());
+        updatePhotonOdometry();
+        if(PhotonPoseBack != null){
+            //System.out.println(PhotonPoseLeft.getX());
+            m_field.getObject("photonBackPose").setPose(PhotonPoseBack);
+            SignalLogger.writeDoubleArray("photonBackPose", new double[] {PhotonPoseBack.getX(), PhotonPoseBack.getY(), PhotonPoseBack.getRotation().getRadians()});
+        }
+        if(PhotonPoseFront != null){
+            m_field.getObject("photonFrontPose").setPose(PhotonPoseFront);
+            SignalLogger.writeDoubleArray("photonFrontPose", new double[] {PhotonPoseFront.getX(), PhotonPoseFront.getY(), PhotonPoseFront.getRotation().getRadians()});
+        }
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply it regardless of DS state.

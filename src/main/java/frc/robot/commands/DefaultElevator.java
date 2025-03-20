@@ -5,14 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorConstants.ElevatorHeights;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DefaultElevator extends Command {
   private ElevatorSubsystem ElevatorSub;
+  private CommandSwerveDrivetrain DriveSub;
   /** Creates a new ElevatorDefault_RunToSetHeight. */
-  public DefaultElevator(ElevatorSubsystem Elevator_Subsystem) {
+  public DefaultElevator(ElevatorSubsystem Elevator_Subsystem, CommandSwerveDrivetrain Drive_Train) {
     ElevatorSub = Elevator_Subsystem;
+    DriveSub = Drive_Train;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ElevatorSub);
   }
@@ -23,7 +27,13 @@ public class DefaultElevator extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() { //TODO: Add logic here to stow elevator if robot fast?
+  public void execute() {
+    double xSpeed = DriveSub.getState().Speeds.vxMetersPerSecond;
+    double ySpeed = DriveSub.getState().Speeds.vyMetersPerSecond;
+    double speed = Math.sqrt((xSpeed * xSpeed) + (ySpeed * ySpeed));
+    if(speed > 1){
+      ElevatorSub.setElevatorSetPoint(ElevatorHeights.LOAD);
+    }
     ElevatorSub.runElevatorFromSetHeight();
   }
 

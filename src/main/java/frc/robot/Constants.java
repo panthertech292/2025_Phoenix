@@ -16,7 +16,7 @@ public class Constants {
         public static final int kIntEncoderToExtRatio = 64;
         public static final double kElevatorEncoderOffset = -0.269;
         //Current Limits
-        public static final double kElevatorStatorCurrentLimit = 20; //TODO: Tune this
+        public static final double kElevatorStatorCurrentLimit = 20;
         //Limits
         public static final double kElevatorMaxHeight = 26.5;
         public static final double kElevatorMinHeight = 0.25;
@@ -36,5 +36,5 @@ public class Constants {
     public static class ClimberConstants{
         //Devices
         public static final int kClimberMotor = 40;
-      }
+    }
 }

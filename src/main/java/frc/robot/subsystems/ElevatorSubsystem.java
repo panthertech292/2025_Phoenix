@@ -156,5 +156,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
     SmartDashboard.putNumber("Elevator Rotation", elevatorCANdi.getPWM1Position().getValueAsDouble());
     SmartDashboard.putNumber("Elevator Voltage", leftElevatorMotor.getMotorVoltage().getValueAsDouble());
+    SmartDashboard.putNumber("Elevator Velocity", leftElevatorMotor.getVelocity().getValueAsDouble());
   }
 }
