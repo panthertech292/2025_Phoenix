@@ -8,6 +8,12 @@ public class Constants {
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
         public static final int kOperatorControllerPort = 1;
+        public static final int kButtonBoardRightSide = 2;
+        public static final int kButtonBoardLeftSide = 3;
+    }
+    public static class StateConstants {
+        public static enum ReefPositions{ALPHABRAVO, INDIAJULIETT, STATIONTOPFAR, STAIONTOPCLOSE};
+        public static enum ReefTranslations{LEFT, ALGEE, RIGHT};
     }
     public static class ElevatorConstants {
         public static enum ElevatorHeights{DOWN, L1, L2, L3, L4, ALGEE_LOW, ALGEE_HIGH, LOAD};
@@ -18,7 +24,7 @@ public class Constants {
         //Ratios & Offsets
         public static final double kElevatorGearDiameter = 2.551;
         public static final int kIntEncoderToExtRatio = 64;
-        public static final double kElevatorEncoderOffset = -0.269;
+        public static final double kElevatorEncoderOffset = -0.403;
         //Current Limits
         public static final double kElevatorStatorCurrentLimit = 20;
         //Limits
@@ -59,12 +65,19 @@ public class Constants {
                 public static final Pose2d lima = new Pose2d();
             }
             public static class coralStationPositions{
-                public static final Pose2d closeUpper = new Pose2d();
-                public static final Pose2d midUpper = new Pose2d(0.90, 7.37, new Rotation2d(Units.degreesToRadians(38.56)));
-                public static final Pose2d farUpper = new Pose2d();
-                public static final Pose2d closeLow = new Pose2d();
-                public static final Pose2d farLow = new Pose2d();
+                public static final Pose2d topClose = new Pose2d(0.62, 7.24, new Rotation2d(Units.degreesToRadians(37.51)));
+                public static final Pose2d topFar = new Pose2d(1.09, 7.58, new Rotation2d(Units.degreesToRadians(36.74)));
+                public static final Pose2d topMid = new Pose2d(0.79, 7.34, new Rotation2d(Units.degreesToRadians(38.16)));
+                public static final Pose2d bottomClose = new Pose2d();
+                public static final Pose2d bottomMid = new Pose2d(1.21, 0.84, new Rotation2d(Units.degreesToRadians(150)));
+                public static final Pose2d bottomFar = new Pose2d();
             }
-        }   
+        }
+        public static class RedPositions{
+            public static class RedCoralStationPositions{
+                public static final Pose2d topMid = new Pose2d(16.22, 7.42, new Rotation2d(Units.degreesToRadians(-34.70)));
+                public static final Pose2d bottomMid = new Pose2d(17.02, 1.22, new Rotation2d(Units.degreesToRadians(-140.60)));
+            }
+        }  
     }
 }
