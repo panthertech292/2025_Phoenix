@@ -9,9 +9,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,8 +16,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorConstants.ElevatorHeights;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.PositionConstants;
 import frc.robot.commands.DefaultElevator;
+import frc.robot.commands.ElevatorSetHeight;
 import frc.robot.commands.ElevatorSetSpeed;
+import frc.robot.commands.Intake;
+import frc.robot.commands.autoScore;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -62,6 +63,10 @@ public class RobotContainer {
 
   private void registerCommands(){
     NamedCommands.registerCommand("Reset to Photon", drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
+    NamedCommands.registerCommand("Intake", new Intake(m_ElevatorSubsystem, m_ShooterSubsystem));
+    NamedCommands.registerCommand("Score-L4", new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L4));
+    NamedCommands.registerCommand("Score-L2", new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L2));
+    NamedCommands.registerCommand("Elevator-L4", new ElevatorSetHeight(m_ElevatorSubsystem, ElevatorHeights.L4));
   }
 
   private void configureBindings() {
@@ -79,14 +84,15 @@ public class RobotContainer {
     .withRotationalRate(-driverController.getRightX() * MaxAngularRate*0.15)));
 
     driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
-
-    driverController.a().whileTrue(drivetrain.driveToPose(new Pose2d(13.71, 5.17, new Rotation2d(Units.degreesToRadians(-30)))));
+    driverController.b().whileTrue(new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L3));
+    driverController.a().whileTrue(drivetrain.driveToPose(PositionConstants.BluePositions.CoralReefPositions.india));
+    driverController.y().whileTrue(drivetrain.driveToPose(PositionConstants.BluePositions.coralStationPositions.midUpper));
     //Operator Controller
     operatorController.y().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L4), m_ElevatorSubsystem));
     operatorController.x().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L2), m_ElevatorSubsystem));
     operatorController.b().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L3), m_ElevatorSubsystem));
     operatorController.a().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.LOAD), m_ElevatorSubsystem));
-    operatorController.leftTrigger().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.10), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
+    operatorController.leftTrigger().whileTrue(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem));
     operatorController.rightTrigger().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.20), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
     operatorController.leftBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, -0.15));
     operatorController.rightBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, 0.15));

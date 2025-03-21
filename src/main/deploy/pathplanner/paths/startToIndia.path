@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.132684426229508,
+        "y": 6.182786885245902
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.403697655604333,
+        "y": 6.152293500579319
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.14,
+        "y": 5.17
+      },
+      "prevControl": {
+        "x": 5.395302810407633,
+        "y": 5.095281903123933
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "India"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5809676129548184,
+      "rotationDegrees": -29.999999999999996
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "reversed": false,
+  "folder": "L4 Auto Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

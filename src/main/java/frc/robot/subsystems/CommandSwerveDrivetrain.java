@@ -50,8 +50,8 @@ import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
-    private PhotonCamera leftCamera;
-    private PhotonCamera rightCamera;
+    private PhotonCamera backCamera;
+    private PhotonCamera frontCamera;
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     private PhotonPoseEstimator photonPoseEstimatorBack;
     private PhotonPoseEstimator photonPoseEstimatorFront;
@@ -268,7 +268,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0, 0),
+                    new PIDConstants(4, 0, 0),
                     // PID constants for rotation
                     new PIDConstants(7, 0, 0)
                 ),
@@ -294,8 +294,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public void configPhotonVision(){
         //62.455 from horizontal
         //64.92 for X ROTATE FROM 0 POINTING FORWARD
-        leftCamera = new PhotonCamera("OV9281-LEFT");
-        rightCamera = new PhotonCamera("OV9281-RIGHT");
+        backCamera = new PhotonCamera("OV9281-LEFT");
+        frontCamera = new PhotonCamera("OV9281-RIGHT");
         photonPoseEstimatorBack = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.29094176, -0.30996128, 0.15571724), new Rotation3d(0,Units.degreesToRadians(-25),Units.degreesToRadians(-60))));
         photonPoseEstimatorBack.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
@@ -305,9 +305,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseBack() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var change : leftCamera.getAllUnreadResults()) {
+        for (var change : backCamera.getAllUnreadResults()) {
             if(change.hasTargets()){
-                if(change.getBestTarget().poseAmbiguity < .1){
+                if(change.getBestTarget().poseAmbiguity < .1 && change.getBestTarget().getArea() > .75){
                     visionEst = photonPoseEstimatorBack.update(change);
                     //photonPoseEstimatorLeft.addHeadingData(change.getTimestampSeconds(), getState().Pose.getRotation());
                     //updateEstimationStdDevs(visionEst, change.getTargets());
@@ -318,9 +318,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseFront() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var change : rightCamera.getAllUnreadResults()) {
+        for (var change : frontCamera.getAllUnreadResults()) {
             if(change.hasTargets()){
-                if(change.getBestTarget().poseAmbiguity < .1){
+                if(change.getBestTarget().poseAmbiguity < .1 && change.getBestTarget().getArea() > .75){
                     visionEst = photonPoseEstimatorFront.update(change);
                     //photonPoseEstimatorLeft.addHeadingData(change.getTimestampSeconds(), getState().Pose.getRotation());
                     //updateEstimationStdDevs(visionEst, change.getTargets());
