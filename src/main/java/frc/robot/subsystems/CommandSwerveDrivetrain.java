@@ -1,14 +1,17 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -39,10 +42,12 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
+import frc.robot.Constants.PositionConstants;
+import frc.robot.Constants.PositionConstants.BluePositions;
+import frc.robot.Constants.PositionConstants.RedPositions;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -58,6 +63,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Pose2d PhotonPoseBack = new Pose2d();
     private Pose2d PhotonPoseFront = new Pose2d();
     private final Field2d m_field = new Field2d(); //TODO: For testing
+    private Alliance allianceColor;
 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
@@ -287,13 +293,38 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(pose, constraints,0.0);
     }
+    public Command pathfindToPose (Supplier<Pose2d> poseSupplier){
+        PathConstraints constraints = new PathConstraints(2.2352, 4.0,Units.degreesToRadians(360) , Units.degreesToRadians(720)); //TODO: CONFIG THIS
+        return new DeferredCommand(() -> AutoBuilder.pathfindToPose(poseSupplier.get(), constraints, 0.0),Set.of(this));  
+    }
+    public Pose2d getDesiredPose(PositionConstants.Positions position) {
+        DriverStation.getAlliance().ifPresent(color -> {allianceColor = color;});
+        if(allianceColor == Alliance.Red){
+            switch(position){
+                case TOPMID:
+                    return RedPositions.RedCoralStationPositions.topMid;
+                case BOTTOMMID:
+                    return RedPositions.RedCoralStationPositions.bottomMid;
+            }
+        }else{ //Blue Side
+            switch(position){
+                case TOPMID:
+                    return BluePositions.coralStationPositions.topMid;
+                case BOTTOMMID:
+                    return BluePositions.coralStationPositions.bottomMid;
+            }
+        }
+        System.out.println("Couldn't find a matching pose!");
+        return new Pose2d();
+    }
+    public Command goToPosition(PositionConstants.Positions position){
+        return pathfindToPose(() -> getDesiredPose(position));
+    }
     public void poseToPhoton(){
         System.out.println("Resetting pose!");
         resetPose(PhotonPoseFront);
     }
     public void configPhotonVision(){
-        //62.455 from horizontal
-        //64.92 for X ROTATE FROM 0 POINTING FORWARD
         backCamera = new PhotonCamera("OV9281-LEFT");
         frontCamera = new PhotonCamera("OV9281-RIGHT");
         photonPoseEstimatorBack = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.29094176, -0.30996128, 0.15571724), new Rotation3d(0,Units.degreesToRadians(-25),Units.degreesToRadians(-60))));

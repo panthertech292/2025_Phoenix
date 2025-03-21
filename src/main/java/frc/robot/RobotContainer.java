@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorConstants.ElevatorHeights;
+import frc.robot.Constants.PositionConstants.Positions;
 import frc.robot.Constants.PositionConstants.BluePositions.coralStationPositions;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultElevator;
@@ -34,13 +35,10 @@ public class RobotContainer {
   //Joysticks
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
-  //private final GenericHID leftButtonBoard = new GenericHID(OperatorConstants.kButtonBoardLeftSide);
-  //private final GenericHID rightButtonBoard = new GenericHID(OperatorConstants.kButtonBoardRightSide);
   //Subsystems
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-  //private final StateSubsystem m_StateSubsystem = new StateSubsystem();
   //Drive Stuff
   //Drive Config
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -53,21 +51,6 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private final SendableChooser<Command> autoChooser;
-
-  /*private ReefPositions select() {
-    return m_StateSubsystem.getSelectedReefState();
-}
-
-  private final Command driveToPosition =
-      new SelectCommand<>(
-          // Maps selector values to commands
-          Map.ofEntries(
-              Map.entry(ReefPositions.ALPHABRAVO, drivetrain.driveToPose(CoralReefPositions.alpha).andThen(new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L4))),
-              Map.entry(ReefPositions.INDIAJULIETT, drivetrain.driveToPose(CoralReefPositions.india).andThen(new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L4))),
-              Map.entry(ReefPositions.STAIONTOPCLOSE, drivetrain.driveToPose(coralStationPositions.topClose).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem))),//.andThen(new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L4))),
-              Map.entry(ReefPositions.STATIONTOPFAR, drivetrain.driveToPose(coralStationPositions.topFar).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)))//.andThen(new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L4)))
-              ),
-          this::select);*/
 
   public RobotContainer() {
     CameraServer.startAutomaticCapture();
@@ -101,8 +84,11 @@ public class RobotContainer {
     .withVelocityY(-driverController.getLeftX() * MaxSpeed*0.15) // Drive left with negative X (left)
     .withRotationalRate(-driverController.getRightX() * MaxAngularRate*0.15)));
 
-    driverController.leftBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.topMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
-    driverController.rightBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.bottomMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
+    //driverController.leftBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.topMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
+    //driverController.rightBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.bottomMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
+    driverController.leftBumper().whileTrue(drivetrain.goToPosition(Positions.TOPMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
+    driverController.rightBumper().whileTrue(drivetrain.goToPosition(Positions.BOTTOMMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
+
     //driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
     //driverController.y().whileTrue(driveToPosition);
     //Operator Controller
@@ -117,19 +103,7 @@ public class RobotContainer {
 
     drivetrain.registerTelemetry(logger::telemeterize);
   }
-  /*private void configureButtonBoard(){
-    Trigger indiaJuliett = new JoystickButton(leftButtonBoard, 4);
-    Trigger alphaBravo = new JoystickButton(leftButtonBoard, 6);
-    Trigger stationTopClose = new JoystickButton(leftButtonBoard, 11);
-    Trigger stationTopFar = new JoystickButton(leftButtonBoard, 12);
-
-    indiaJuliett.onTrue(m_StateSubsystem.runOnce(() -> m_StateSubsystem.setSelectedReefState(ReefPositions.INDIAJULIETT)));
-    alphaBravo.onTrue(m_StateSubsystem.runOnce(() -> m_StateSubsystem.setSelectedReefState(ReefPositions.ALPHABRAVO)));
-    stationTopClose.onTrue(m_StateSubsystem.runOnce(() -> m_StateSubsystem.setSelectedReefState(ReefPositions.STAIONTOPCLOSE)));
-    stationTopFar.onTrue(m_StateSubsystem.runOnce(() -> m_StateSubsystem.setSelectedReefState(ReefPositions.STATIONTOPFAR)));
-  }*/
   
-
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }

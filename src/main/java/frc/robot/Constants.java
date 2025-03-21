@@ -11,10 +11,6 @@ public class Constants {
         public static final int kButtonBoardRightSide = 2;
         public static final int kButtonBoardLeftSide = 3;
     }
-    public static class StateConstants {
-        public static enum ReefPositions{ALPHABRAVO, INDIAJULIETT, STATIONTOPFAR, STAIONTOPCLOSE};
-        public static enum ReefTranslations{LEFT, ALGEE, RIGHT};
-    }
     public static class ElevatorConstants {
         public static enum ElevatorHeights{DOWN, L1, L2, L3, L4, ALGEE_LOW, ALGEE_HIGH, LOAD};
         //Devices
@@ -49,6 +45,7 @@ public class Constants {
         public static final int kClimberMotor = 40;
     }
     public static class PositionConstants{
+        public static enum Positions{TOPMID, BOTTOMMID};
         public static class BluePositions{
             public static class CoralReefPositions{
                 public static final Pose2d alpha = new Pose2d(3.18, 4, new Rotation2d(Units.degreesToRadians(90)));

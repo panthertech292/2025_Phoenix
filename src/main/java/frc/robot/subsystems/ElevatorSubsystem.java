@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -103,6 +105,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftElevatorMotor.setControl(elevatorPower.withOutput(speed)
     .withLimitForwardMotion(isElevatorMaxHeight())
     .withLimitReverseMotion(isElevatorMinHeight()));
+  }
+  public void setElevatorSafe(double speed, BooleanSupplier maxHeight, BooleanSupplier minHeight){ //TODO: REWRITE THIS TO HAVE A FUNCTION CALL THIS FUNCTION, SO WE DON'T NEED TO SET SAFTEYS EVERY TIME!
+    leftElevatorMotor.setControl(elevatorPower.withOutput(speed)
+    .withLimitForwardMotion(maxHeight.getAsBoolean())
+    .withLimitReverseMotion(minHeight.getAsBoolean()));
   }
   public void setElevatorHeight(double height){
     if(height >= ElevatorConstants.kElevatorMinHeight && height < ElevatorConstants.kElevatorMaxHeight){

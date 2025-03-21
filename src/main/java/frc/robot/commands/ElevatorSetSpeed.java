@@ -27,6 +27,7 @@ public class ElevatorSetSpeed extends Command {
   @Override
   public void execute() {
     ElevatorSub.setElevator(elvSpeed);
+    //ElevatorSub.setElevatorSafe(elvSpeed, () -> ElevatorSub.isElevatorMaxHeight(), () -> ElevatorSub.isElevatorMinHeight()); TODO: Test this!
   }
 
   // Called once the command ends or is interrupted.
