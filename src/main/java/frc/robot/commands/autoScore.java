@@ -34,7 +34,7 @@ public class autoScore extends Command {
   public void execute() {
     ElevatorSub.runElevatorFromSetHeight();
     if(ElevatorSub.isElevatorAtHeight()){
-      ShooterSub.setRollers(.15);
+      ShooterSub.setRollers(.10);
     }
   }
 

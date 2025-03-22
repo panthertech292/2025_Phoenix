@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.08889113455912,
-        "y": 2.0717841900203497
+        "x": 4.3755122950819665,
+        "y": 1.4116803278688521
       },
       "isLocked": false,
       "linkedName": "stationBottomMid"
     },
     {
       "anchor": {
-        "x": 4.75,
-        "y": 2.6703893442622952
+        "x": 5.155,
+        "y": 2.889
       },
       "prevControl": {
-        "x": 4.279610655737705,
-        "y": 2.274795081967213
+        "x": 5.082786885245901,
+        "y": 2.418647540983607
       },
       "nextControl": null,
       "isLocked": false,

@@ -103,7 +103,7 @@ public class RobotContainer {
     operatorController.b().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L3), m_ElevatorSubsystem));
     operatorController.a().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.LOAD), m_ElevatorSubsystem));
     operatorController.leftTrigger().whileTrue(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem));
-    operatorController.rightTrigger().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.20), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
+    operatorController.rightTrigger().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.10), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
     operatorController.leftBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, -0.15));
     operatorController.rightBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, 0.15));
     operatorController.back().onTrue(m_ClimberSubsystem.runOnce(() -> m_ClimberSubsystem.unLockServo()));

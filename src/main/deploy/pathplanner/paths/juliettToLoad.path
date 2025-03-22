@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.75,
-        "y": 5.38
+        "x": 4.855020491803279,
+        "y": 5.3196721311475414
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.75,
-        "y": 5.38
+        "x": 5.855020491803279,
+        "y": 5.3196721311475414
       },
       "isLocked": false,
       "linkedName": "Julliett"
