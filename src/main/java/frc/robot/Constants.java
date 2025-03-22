@@ -24,7 +24,7 @@ public class Constants {
         //Current Limits
         public static final double kElevatorStatorCurrentLimit = 20;
         //Limits
-        public static final double kElevatorMaxHeight = 5;//26.5;
+        public static final double kElevatorMaxHeight = 26.5;
         public static final double kElevatorMinHeight = 0.25;
         //Heights
         public static final double kElevatorL1Height = 0.25; //TODO: Find this
