@@ -5,18 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ElevatorConstants.ElevatorHeights;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DefaultElevator extends Command {
   private ElevatorSubsystem ElevatorSub;
-  private CommandSwerveDrivetrain DriveSub;
   /** Creates a new ElevatorDefault_RunToSetHeight. */
-  public DefaultElevator(ElevatorSubsystem Elevator_Subsystem, CommandSwerveDrivetrain Drive_Train) {
+  public DefaultElevator(ElevatorSubsystem Elevator_Subsystem) {
     ElevatorSub = Elevator_Subsystem;
-    DriveSub = Drive_Train;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ElevatorSub);
   }

@@ -5,22 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "startToIndia"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator-L4"
-                }
-              }
-            ]
+            "pathName": "startToFoxtrot"
           }
         },
         {
@@ -42,29 +29,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "IndiaToLoad"
+                  "pathName": "foxtrotToLoad"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "loadToJuliett"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator-L4"
-                }
-              }
-            ]
+            "pathName": "loadToEcho"
           }
         },
         {
@@ -86,29 +60,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "juliettToLoad"
+                  "pathName": "echoToLoad"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "loadToAlpha"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator-L4"
-                }
-              }
-            ]
+            "pathName": "loadToBravo"
           }
         },
         {
@@ -121,6 +82,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Top",
+  "folder": "Bottom",
   "choreoAuto": false
 }

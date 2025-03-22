@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ElevatorConstants.ElevatorHeights;
 import frc.robot.Constants.PositionConstants.Positions;
-import frc.robot.Constants.PositionConstants.BluePositions.coralStationPositions;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ClimberSetSpeed;
 import frc.robot.commands.DefaultElevator;
@@ -62,7 +61,7 @@ public class RobotContainer {
     registerCommands();
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto", autoChooser);
-    m_ElevatorSubsystem.setDefaultCommand(new DefaultElevator(m_ElevatorSubsystem, drivetrain));
+    m_ElevatorSubsystem.setDefaultCommand(new DefaultElevator(m_ElevatorSubsystem));
   }
 
   private void registerCommands(){

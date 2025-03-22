@@ -385,11 +385,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         updatePhotonOdometry();
         if(PhotonPoseBack != null){
             //System.out.println(PhotonPoseLeft.getX());
-            m_field.getObject("photonBackPose").setPose(PhotonPoseBack);
+            //m_field.getObject("photonBackPose").setPose(PhotonPoseBack);
             SignalLogger.writeDoubleArray("photonBackPose", new double[] {PhotonPoseBack.getX(), PhotonPoseBack.getY(), PhotonPoseBack.getRotation().getRadians()});
         }
         if(PhotonPoseFront != null){
-            m_field.getObject("photonFrontPose").setPose(PhotonPoseFront);
+            //m_field.getObject("photonFrontPose").setPose(PhotonPoseFront);
             SignalLogger.writeDoubleArray("photonFrontPose", new double[] {PhotonPoseFront.getX(), PhotonPoseFront.getY(), PhotonPoseFront.getRotation().getRadians()});
         }
         /*

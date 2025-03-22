@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "startToIndia"
+                  "pathName": "startToFoxtrot"
                 }
               },
               {
@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "IndiaToLoad"
+                  "pathName": "foxtrotToLoad"
                 }
               }
             ]
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "loadToJuliett"
+                  "pathName": "loadToEcho"
                 }
               },
               {
@@ -86,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "juliettToLoad"
+                  "pathName": "echoToLoad"
                 }
               }
             ]
@@ -99,7 +99,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "loadToAlpha"
+                  "pathName": "loadToBravo"
                 }
               },
               {
@@ -121,6 +121,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Top",
+  "folder": "Bottom",
   "choreoAuto": false
 }

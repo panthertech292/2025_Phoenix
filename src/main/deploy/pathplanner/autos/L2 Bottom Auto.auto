@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "startToIndia"
+            "pathName": "startToFoxtrot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score-L4"
+            "name": "Score-L2"
           }
         },
         {
@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "IndiaToLoad"
+                  "pathName": "foxtrotToLoad"
                 }
               }
             ]
@@ -38,13 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "loadToJuliett"
+            "pathName": "loadToEcho"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score-L4"
+            "name": "Score-L2"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "juliettToLoad"
+                  "pathName": "echoToLoad"
                 }
               }
             ]
@@ -69,19 +69,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "loadToAlpha"
+            "pathName": "loadToBravo"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score-L4"
+            "name": "Score-L2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Top",
+  "folder": "Bottom",
   "choreoAuto": false
 }

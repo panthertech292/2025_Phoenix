@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9,
-        "y": 7.37
+        "x": 7.133,
+        "y": 1.889
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9,
-        "y": 7.37
+        "x": 7.456855596663079,
+        "y": 2.1854497188005593
       },
       "isLocked": false,
-      "linkedName": "stationTopMid"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.18,
-        "y": 4.0
+        "x": 5.14,
+        "y": 2.888565573770492
       },
       "prevControl": {
-        "x": 2.18,
-        "y": 4.0
+        "x": 5.107470430518322,
+        "y": 2.6406909540343504
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Foxtrot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6510236220472423,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.6471380471380405,
+      "rotationDegrees": -150.0
     }
   ],
   "constraintZones": [],
@@ -47,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -150.0
   },
   "reversed": false,
-  "folder": "L4 Top Paths",
+  "folder": "L4 Bottom Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 38.56000000000001
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

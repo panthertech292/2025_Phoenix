@@ -5,28 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "startToIndia"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator-L4"
-                }
-              }
-            ]
+            "pathName": "startToIndia"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score-L4"
+            "name": "Score-L2"
           }
         },
         {
@@ -49,28 +36,15 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "loadToJuliett"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator-L4"
-                }
-              }
-            ]
+            "pathName": "loadToJuliett"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score-L4"
+            "name": "Score-L2"
           }
         },
         {
@@ -93,28 +67,15 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "loadToAlpha"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator-L4"
-                }
-              }
-            ]
+            "pathName": "loadToAlpha"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score-L4"
+            "name": "Score-L2"
           }
         }
       ]
