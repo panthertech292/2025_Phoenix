@@ -48,8 +48,12 @@ public class RobotContainer {
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
     .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
     .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.FieldCentric drive5DeadBand = new SwerveRequest.FieldCentric()
+    .withDeadband(MaxSpeed * 0.02).withRotationalDeadband(MaxAngularRate * 0.02) // Add a 10% deadband
+    .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private final SendableChooser<Command> autoChooser;
@@ -82,7 +86,7 @@ public class RobotContainer {
     driverController.back().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     driverController.rightTrigger().whileTrue(drivetrain.applyRequest(() ->
-    drive.withVelocityX(-driverController.getLeftY() * MaxSpeed*0.15) // Drive forward with negative Y (forward)
+    drive5DeadBand.withVelocityX(-driverController.getLeftY() * MaxSpeed*0.15) // Drive forward with negative Y (forward)
     .withVelocityY(-driverController.getLeftX() * MaxSpeed*0.15) // Drive left with negative X (left)
     .withRotationalRate(-driverController.getRightX() * MaxAngularRate*0.15)));
 
@@ -111,6 +115,7 @@ public class RobotContainer {
   }
   
   public Command getAutonomousCommand() {
+    System.out.println("AUTO RUNNING: " + autoChooser.getSelected().getName());
     return autoChooser.getSelected();
   }
 }

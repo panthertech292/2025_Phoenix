@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.947,
-        "y": 7.18
+        "x": 1.09,
+        "y": 7.49
       },
       "prevControl": {
-        "x": 2.0249713114754093,
-        "y": 6.616147540983606
+        "x": 2.1679713114754096,
+        "y": 6.926147540983607
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 38.56000000000001
+    "rotation": 35.0
   },
   "reversed": false,
   "folder": "L4 Top Paths",
