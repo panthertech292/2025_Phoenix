@@ -152,9 +152,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     //alertElevatorHeight();
-    SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
+    //SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
     SmartDashboard.putNumber("Elevator Rotation", elevatorCANdi.getPWM1Position().getValueAsDouble());
-    SmartDashboard.putNumber("Elevator Voltage", leftElevatorMotor.getMotorVoltage().getValueAsDouble());
-    SmartDashboard.putNumber("Elevator Velocity", leftElevatorMotor.getVelocity().getValueAsDouble());
+    //SmartDashboard.putNumber("Elevator Voltage", leftElevatorMotor.getMotorVoltage().getValueAsDouble());
+    //SmartDashboard.putNumber("Elevator Velocity", leftElevatorMotor.getVelocity().getValueAsDouble());
+    //SmartDashboard.putNumber("Elevator Voltage Right", rightElevatorMotor.getMotorVoltage().getValueAsDouble());
   }
 }

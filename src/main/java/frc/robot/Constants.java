@@ -20,7 +20,7 @@ public class Constants {
         //Ratios & Offsets
         public static final double kElevatorGearDiameter = 2.551;
         public static final int kIntEncoderToExtRatio = 64;
-        public static final double kElevatorEncoderOffset = -0.403;
+        public static final double kElevatorEncoderOffset = -0.0632;
         //Current Limits
         public static final double kElevatorStatorCurrentLimit = 20;
         //Limits
@@ -66,18 +66,18 @@ public class Constants {
                 public static final Pose2d lima = new Pose2d();
             }
             public static class coralStationPositions{
-                public static final Pose2d topClose = new Pose2d(0.62, 7.24, new Rotation2d(Units.degreesToRadians(37.51)));
-                public static final Pose2d topFar = new Pose2d(1.09, 7.58, new Rotation2d(Units.degreesToRadians(36.74)));
-                public static final Pose2d topMid = new Pose2d(0.79, 7.34, new Rotation2d(Units.degreesToRadians(38.16)));
-                public static final Pose2d bottomClose = new Pose2d();
-                public static final Pose2d bottomMid = new Pose2d(1.21, 0.84, new Rotation2d(Units.degreesToRadians(150)));
-                public static final Pose2d bottomFar = new Pose2d();
+                //public static final Pose2d topClose = new Pose2d(0.62, 7.24, new Rotation2d(Units.degreesToRadians(37.51)));
+                //public static final Pose2d topFar = new Pose2d(1.09, 7.58, new Rotation2d(Units.degreesToRadians(36.74)));
+                public static final Pose2d topMid = new Pose2d(0.947, 7.180, new Rotation2d(Units.degreesToRadians(35)));
+                //public static final Pose2d bottomClose = new Pose2d();
+                public static final Pose2d bottomMid = new Pose2d(1, 0.82, new Rotation2d(Units.degreesToRadians(145)));
+                //public static final Pose2d bottomFar = new Pose2d();
             }
         }
         public static class RedPositions{
             public static class RedCoralStationPositions{ 
-                public static final Pose2d topMid = new Pose2d(17.02, 1.22, new Rotation2d(Units.degreesToRadians(-140.60)));
-                public static final Pose2d bottomMid = new Pose2d(16.22, 7.42, new Rotation2d(Units.degreesToRadians(-34.70)));
+                public static final Pose2d topMid = new Pose2d(16.45, 0.82, new Rotation2d(Units.degreesToRadians(-145)));
+                public static final Pose2d bottomMid = new Pose2d(16.45, 7.274, new Rotation2d(Units.degreesToRadians(-35)));
             }
         }  
     }

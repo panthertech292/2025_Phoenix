@@ -23,6 +23,11 @@ public class ClimberSetSpeed extends Command {
   @Override
   public void initialize() {
     ClimberSub.setClimb(speed);
+    if(speed > 0){
+      ClimberSub.lockServo();
+    }else{
+      ClimberSub.unLockServo();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
