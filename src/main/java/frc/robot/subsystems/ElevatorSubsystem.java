@@ -106,15 +106,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     .withLimitForwardMotion(isElevatorMaxHeight())
     .withLimitReverseMotion(isElevatorMinHeight()));
   }
-  public void setElevatorSafe(double speed, BooleanSupplier maxHeight, BooleanSupplier minHeight){ //TODO: REWRITE THIS TO HAVE A FUNCTION CALL THIS FUNCTION, SO WE DON'T NEED TO SET SAFTEYS EVERY TIME!
-    leftElevatorMotor.setControl(elevatorPower.withOutput(speed)
-    .withLimitForwardMotion(maxHeight.getAsBoolean())
-    .withLimitReverseMotion(minHeight.getAsBoolean()));
-  }
   public void setElevatorHeight(double height){
     if(height >= ElevatorConstants.kElevatorMinHeight && height < ElevatorConstants.kElevatorMaxHeight){
       double rots = height / ElevatorConstants.kElevatorGearDiameter / Math.PI; //convert height to motor rotations
-      leftElevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(rots)
+      leftElevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(rots).withEnableFOC(true)
       .withLimitForwardMotion(isElevatorMaxHeight())
       .withLimitReverseMotion(isElevatorMinHeight()));
     }else{

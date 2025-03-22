@@ -22,6 +22,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -325,6 +326,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         resetPose(PhotonPoseFront);
     }
     public void configPhotonVision(){
+        SmartDashboard.putData("FieldUse", m_field);
+        // Logging callback for current robot pose
+        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {m_field.setRobotPose(pose);});
+        // Logging callback for target robot pose
+        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {m_field.getObject("target pose").setPose(pose);});
+        // Logging callback for the active path, this is sent as a list of poses
+        PathPlannerLogging.setLogActivePathCallback((poses) -> {m_field.getObject("path").setPoses(poses);});
+
         backCamera = new PhotonCamera("OV9281-LEFT");
         frontCamera = new PhotonCamera("OV9281-RIGHT");
         photonPoseEstimatorBack = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(-0.29094176, -0.30996128, 0.15571724), new Rotation3d(0,Units.degreesToRadians(-25),Units.degreesToRadians(-60))));
@@ -332,7 +341,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         photonPoseEstimatorFront = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d(new Translation3d(0.2777998, -0.31421832, 0.15571724), new Rotation3d(0,Units.degreesToRadians(-25),Units.degreesToRadians(-120))));
         photonPoseEstimatorFront.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-        SmartDashboard.putData("FieldMap!", m_field);
+        //SmartDashboard.putData("FieldMap!", m_field);
     }
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseBack() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();

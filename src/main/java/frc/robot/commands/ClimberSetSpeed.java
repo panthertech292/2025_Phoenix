@@ -5,35 +5,34 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorSetSpeed extends Command {
-  private ElevatorSubsystem ElevatorSub;
-  private double elvSpeed;
-  /** Creates a new ElevatorSetSpeed. */
-  public ElevatorSetSpeed(ElevatorSubsystem Elevator_Subsystem, double speed) {
-    ElevatorSub = Elevator_Subsystem;
-    elvSpeed = speed;
+public class ClimberSetSpeed extends Command {
+  private ClimberSubsystem ClimberSub;
+  private double speed;
+  /** Creates a new ClimberSetSpeed. */
+  public ClimberSetSpeed(ClimberSubsystem Climber_Subsystem, double Climber_Speed) {
+    ClimberSub = Climber_Subsystem;
+    speed = Climber_Speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(ElevatorSub);
+    addRequirements(ClimberSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    ClimberSub.setClimb(speed);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    ElevatorSub.setElevator(elvSpeed);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ElevatorSub.setElevator(0);
-    ElevatorSub.setHeightToCurrentPosition();
+    ClimberSub.setClimb(0);
   }
 
   // Returns true when the command should end.

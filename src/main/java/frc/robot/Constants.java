@@ -24,7 +24,7 @@ public class Constants {
         //Current Limits
         public static final double kElevatorStatorCurrentLimit = 20;
         //Limits
-        public static final double kElevatorMaxHeight = 26.5;
+        public static final double kElevatorMaxHeight = 5;//26.5;
         public static final double kElevatorMinHeight = 0.25;
         //Heights
         public static final double kElevatorL1Height = 0.25; //TODO: Find this
@@ -43,6 +43,10 @@ public class Constants {
     public static class ClimberConstants{
         //Devices
         public static final int kClimberMotor = 40;
+        public static final int kClimberServo = 3; //PWM
+        //Agles
+        public static final double kServoLocked = 30;
+        public static final double kServoUnlocked = 4;
     }
     public static class PositionConstants{
         public static enum Positions{TOPMID, BOTTOMMID};
@@ -71,9 +75,9 @@ public class Constants {
             }
         }
         public static class RedPositions{
-            public static class RedCoralStationPositions{
-                public static final Pose2d topMid = new Pose2d(16.22, 7.42, new Rotation2d(Units.degreesToRadians(-34.70)));
-                public static final Pose2d bottomMid = new Pose2d(17.02, 1.22, new Rotation2d(Units.degreesToRadians(-140.60)));
+            public static class RedCoralStationPositions{ 
+                public static final Pose2d topMid = new Pose2d(17.02, 1.22, new Rotation2d(Units.degreesToRadians(-140.60)));
+                public static final Pose2d bottomMid = new Pose2d(16.22, 7.42, new Rotation2d(Units.degreesToRadians(-34.70)));
             }
         }  
     }

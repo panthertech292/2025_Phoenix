@@ -18,12 +18,14 @@ import frc.robot.Constants.ElevatorConstants.ElevatorHeights;
 import frc.robot.Constants.PositionConstants.Positions;
 import frc.robot.Constants.PositionConstants.BluePositions.coralStationPositions;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ClimberSetSpeed;
 import frc.robot.commands.DefaultElevator;
 import frc.robot.commands.ElevatorSetHeight;
 import frc.robot.commands.ElevatorSetSpeed;
 import frc.robot.commands.Intake;
 import frc.robot.commands.autoScore;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -39,6 +41,7 @@ public class RobotContainer {
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   //Drive Stuff
   //Drive Config
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -100,6 +103,10 @@ public class RobotContainer {
     operatorController.rightTrigger().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.20), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
     operatorController.leftBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, -0.15));
     operatorController.rightBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, 0.15));
+    operatorController.back().onTrue(m_ClimberSubsystem.runOnce(() -> m_ClimberSubsystem.unLockServo()));
+    operatorController.start().onTrue(m_ClimberSubsystem.runOnce(() -> m_ClimberSubsystem.lockServo()));
+    operatorController.povUp().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, 0.20));
+    operatorController.povDown().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, -0.20));
 
     drivetrain.registerTelemetry(logger::telemeterize);
   }
