@@ -295,7 +295,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return AutoBuilder.pathfindToPose(pose, constraints,0.0);
     }
     public Command pathfindToPose (Supplier<Pose2d> poseSupplier){
-        PathConstraints constraints = new PathConstraints(2.2352, 4.0,Units.degreesToRadians(360) , Units.degreesToRadians(720)); //TODO: CONFIG THIS
+        PathConstraints constraints = new PathConstraints(4, 4.0,Units.degreesToRadians(360) , Units.degreesToRadians(720)); //TODO: CONFIG THIS
         return new DeferredCommand(() -> AutoBuilder.pathfindToPose(poseSupplier.get(), constraints, 0.0),Set.of(this));  
     }
     public Pose2d getDesiredPose(PositionConstants.Positions position) {

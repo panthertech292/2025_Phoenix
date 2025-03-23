@@ -42,6 +42,7 @@ public class autoScore extends Command {
   @Override
   public void end(boolean interrupted) {
     ShooterSub.setRollers(0);
+    System.out.println("Shooting at height: " + ElevatorSub.getElevatorHeight());
   }
 
   // Returns true when the command should end.

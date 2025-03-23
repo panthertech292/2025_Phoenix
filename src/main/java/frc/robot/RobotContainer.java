@@ -90,6 +90,11 @@ public class RobotContainer {
     .withVelocityY(-driverController.getLeftX() * MaxSpeed*0.15) // Drive left with negative X (left)
     .withRotationalRate(-driverController.getRightX() * MaxAngularRate*0.15)));
 
+    driverController.leftTrigger().whileTrue(drivetrain.applyRequest(() ->
+    drive5DeadBand.withVelocityX(-driverController.getLeftY() * MaxSpeed*0.05) // Drive forward with negative Y (forward)
+    .withVelocityY(-driverController.getLeftX() * MaxSpeed*0.05) // Drive left with negative X (left)
+    .withRotationalRate(-driverController.getRightX() * MaxAngularRate*0.05)));
+
     //driverController.leftBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.topMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
     //driverController.rightBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.bottomMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
     driverController.leftBumper().whileTrue(drivetrain.goToPosition(Positions.TOPMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));

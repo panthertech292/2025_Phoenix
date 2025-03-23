@@ -70,7 +70,7 @@ public class Constants {
                 //public static final Pose2d topFar = new Pose2d(1.09, 7.58, new Rotation2d(Units.degreesToRadians(36.74)));
                 public static final Pose2d topMid = new Pose2d(1.090, 7.49, new Rotation2d(Units.degreesToRadians(35)));
                 //public static final Pose2d bottomClose = new Pose2d();
-                public static final Pose2d bottomMid = new Pose2d(1, 0.82, new Rotation2d(Units.degreesToRadians(145)));
+                public static final Pose2d bottomMid = new Pose2d(.950, 0.770, new Rotation2d(Units.degreesToRadians(145)));
                 //public static final Pose2d bottomFar = new Pose2d();
             }
         }
