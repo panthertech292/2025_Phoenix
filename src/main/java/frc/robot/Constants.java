@@ -43,6 +43,7 @@ public class Constants {
     public static class ClimberConstants{
         //Devices
         public static final int kClimberMotor = 40;
+        public static final int kClimberIntakeMotor = 41;
         public static final int kClimberServo = 3; //PWM
         //Agles
         public static final double kServoLocked = 30;

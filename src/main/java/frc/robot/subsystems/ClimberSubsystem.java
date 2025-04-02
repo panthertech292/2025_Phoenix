@@ -5,7 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.Servo;
@@ -14,6 +17,7 @@ import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
   private final TalonFX ClimberMotor;
+  private final TalonFXS ClimberIntakeMotor;
   private final Servo ClimberServo;
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
@@ -22,10 +26,19 @@ public class ClimberSubsystem extends SubsystemBase {
     climbConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     ClimberMotor.getConfigurator().apply(climbConfig);
 
+    ClimberIntakeMotor = new TalonFXS(ClimberConstants.kClimberIntakeMotor);
+    TalonFXSConfiguration intakeConfig = new TalonFXSConfiguration();
+    intakeConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    intakeConfig.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
+    ClimberIntakeMotor.getConfigurator().apply(intakeConfig);
+
     ClimberServo = new Servo(ClimberConstants.kClimberServo);
   }
   public void setClimb(double speed){
     ClimberMotor.set(speed);
+  }
+  public void setClimbIntake(double speed){
+    ClimberIntakeMotor.set(speed);
   }
   public double getRelativePosition(){
     return ClimberMotor.getPosition().getValueAsDouble();

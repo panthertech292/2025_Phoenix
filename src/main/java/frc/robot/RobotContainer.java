@@ -111,10 +111,10 @@ public class RobotContainer {
     operatorController.rightTrigger().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.10), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
     operatorController.leftBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, -0.15));
     operatorController.rightBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, 0.15));
-    operatorController.back().onTrue(m_ClimberSubsystem.runOnce(() -> m_ClimberSubsystem.unLockServo()));
-    operatorController.start().onTrue(m_ClimberSubsystem.runOnce(() -> m_ClimberSubsystem.lockServo()));
-    operatorController.povUp().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, 0.20));
-    operatorController.povDown().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, -0.20));
+    operatorController.back().whileTrue(Commands.startEnd(() -> m_ClimberSubsystem.setClimbIntake(-.60), () -> m_ClimberSubsystem.setClimbIntake(0), m_ClimberSubsystem));
+    operatorController.start().whileTrue(Commands.startEnd(() -> m_ClimberSubsystem.setClimbIntake(.60), () -> m_ClimberSubsystem.setClimbIntake(0), m_ClimberSubsystem));
+    operatorController.povUp().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, 0.35));
+    operatorController.povDown().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, -0.35));
 
     drivetrain.registerTelemetry(logger::telemeterize);
   }
