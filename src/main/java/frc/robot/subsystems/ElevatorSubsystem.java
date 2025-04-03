@@ -58,7 +58,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftConfig.Slot0.kV = 1.273;
     leftConfig.Slot0.kA = 0.0; 
     leftConfig.Slot0.kP = 100; 
-    leftConfig.MotionMagic.MotionMagicCruiseVelocity = 4;
+    leftConfig.MotionMagic.MotionMagicCruiseVelocity = 2;
     leftConfig.MotionMagic.MotionMagicAcceleration = 8;
     leftConfig.MotionMagic.MotionMagicJerk = 80;
     leftElevatorMotor.getConfigurator().apply(leftConfig);
@@ -155,7 +155,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     //SmartDashboard.putNumber("Elevator Height", getElevatorHeight());
     SmartDashboard.putNumber("Elevator Rotation", elevatorCANdi.getPWM1Position().getValueAsDouble());
     //SmartDashboard.putNumber("Elevator Voltage", leftElevatorMotor.getMotorVoltage().getValueAsDouble());
-    //SmartDashboard.putNumber("Elevator Velocity", leftElevatorMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Elevator Velocity", leftElevatorMotor.getVelocity().getValueAsDouble());
     //SmartDashboard.putNumber("Elevator Voltage Right", rightElevatorMotor.getMotorVoltage().getValueAsDouble());
   }
 }
