@@ -85,6 +85,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double getElevatorHeight(){ //Gets elevator height in inches
     return elevatorCANdi.getPWM1Position().getValueAsDouble() * ElevatorConstants.kElevatorGearDiameter * Math.PI ;
   }
+  public double getElevatorTargetHeight(){
+    return elevatorSetHeight;
+  }
   private void alertElevatorHeight(){
     double height = getElevatorHeight();
     if(height < -1 || height > 30){

@@ -24,14 +24,14 @@ public class FindReefScore extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      //Commands.runOnce(() -> Elevator_Subsystem.setElevatorSetPoint(ElevatorHeights.SENSE), Elevator_Subsystem),
+      Commands.runOnce(() -> Elevator_Subsystem.setElevatorSetPoint(ElevatorHeights.SENSE), Elevator_Subsystem),
       //Drive_Subsystem.applyRequest(() -> robotCentricDrive.withVelocityY(-0.5)).until(Drive_Subsystem.againstReef()),
-      //new WaitUntilElevatorAtHeight(Elevator_Subsystem),
+      new WaitUntilElevatorAtHeight(Elevator_Subsystem),
       Drive_Subsystem.applyRequest(() -> robotCentricDrive.withVelocityX(0.35)).until(Shooter_Substem.reefIsInFrontRobot()).withTimeout(0.5),
       Drive_Subsystem.applyRequest(() -> robotCentricDrive.withVelocityX(-0.35)).until(Shooter_Substem.reefIsInFrontRobot()).withTimeout(1.25),
       Drive_Subsystem.applyRequest(() -> robotCentricDrive.withVelocityX(0.35)).until(Shooter_Substem.reefIsInFrontRobot()).withTimeout(0.5),
       Drive_Subsystem.applyRequest(() -> brake).withTimeout(0.1),
-      new autoScore(Elevator_Subsystem, Shooter_Substem, height)
+      new autoScoreEndless(Elevator_Subsystem, Shooter_Substem, height)
       //new autoScoreIfAligned(Elevator_Subsystem, Shooter_Substem, height)
     );
   }

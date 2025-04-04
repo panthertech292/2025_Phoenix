@@ -24,7 +24,7 @@ public class Constants {
         //Ratios & Offsets
         public static final double kElevatorGearDiameter = 2.551;
         public static final int kIntEncoderToExtRatio = 48;
-        public static final double kElevatorEncoderOffset = 0.136;
+        public static final double kElevatorEncoderOffset = 0.128;
         //Current Limits
         public static final double kElevatorStatorCurrentLimit = 20;
         //Limits

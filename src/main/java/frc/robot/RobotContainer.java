@@ -24,7 +24,6 @@ import frc.robot.commands.ElevatorSetSpeed;
 import frc.robot.commands.FindReef;
 import frc.robot.commands.Intake;
 import frc.robot.commands.autoScore;
-import frc.robot.commands.autoScoreIfAligned;
 import frc.robot.commands.FindReefScore;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
