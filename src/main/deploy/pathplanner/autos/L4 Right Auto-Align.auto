@@ -1,0 +1,162 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "startToFoxtrot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator-SenseHeight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveUntilTouch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FindReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score-L4"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "foxtrotToLoad"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "loadToEcho"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator-SenseHeight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveUntilTouch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FindReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score-L4"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "echoToLoad"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "loadToCharlie"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator-SenseHeight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveUntilTouch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FindReef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score-L4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Bottom",
+  "choreoAuto": false
+}

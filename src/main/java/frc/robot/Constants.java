@@ -16,7 +16,7 @@ public class Constants {
         public static final double kCANRangeDistanceOffset = 5.5;
     }
     public static class ElevatorConstants {
-        public static enum ElevatorHeights{DOWN, L1, L2, L3, L4, ALGEE_LOW, ALGEE_HIGH, LOAD};
+        public static enum ElevatorHeights{DOWN, L1, L2, L3, L4, SENSE,ALGEE_LOW, ALGEE_HIGH, LOAD};
         //Devices
         public static final int kLeftElevatorMotor = 20;
         public static final int kRightElevatorMotor = 21;
@@ -35,6 +35,7 @@ public class Constants {
         public static final double kElevatorL2Height = 5.54;
         public static final double kElevatorL3Height = 13.66;
         public static final double kElevatorL4Height = 26.04;
+        public static final double kElevatorSenseHeight = 19.785;
         public static final double kElevatorAlgeeLowHeight = 0; //TODO: Find this
         public static final double kElevatorAlgeeHighHeight = 0; //TODO: Find this
         public static final double kElevatorLoadHeight = 0.30; //TODO: Find this

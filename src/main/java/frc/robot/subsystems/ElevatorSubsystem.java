@@ -145,6 +145,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       case LOAD:
         elevatorSetHeight = ElevatorConstants.kElevatorLoadHeight;
       break;
+      case SENSE:
+        elevatorSetHeight = ElevatorConstants.kElevatorSenseHeight;
+      break;
     }
   }
 

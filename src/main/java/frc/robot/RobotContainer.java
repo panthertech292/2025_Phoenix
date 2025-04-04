@@ -21,8 +21,11 @@ import frc.robot.commands.ClimberSetSpeed;
 import frc.robot.commands.DefaultElevator;
 import frc.robot.commands.ElevatorSetHeight;
 import frc.robot.commands.ElevatorSetSpeed;
+import frc.robot.commands.FindReef;
 import frc.robot.commands.Intake;
 import frc.robot.commands.autoScore;
+import frc.robot.commands.autoScoreIfAligned;
+import frc.robot.commands.FindReefScore;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -57,6 +60,9 @@ public class RobotContainer {
   private final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   private final Command driveUntilTouch = drivetrain.applyRequest(() ->
   robotCentricDrive.withVelocityY(-0.5)).until(drivetrain.againstReef()); // Drive left with negative X (left)
+
+  private final Command findTheReef = new FindReef(drivetrain, m_ShooterSubsystem).andThen(drivetrain.applyRequest(() -> brake).withTimeout(0.1));
+  private final Command findAutoL4 = new FindReefScore(drivetrain, m_ShooterSubsystem, m_ElevatorSubsystem, ElevatorHeights.L4);
   
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -78,6 +84,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Score-L4", new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L4));
     NamedCommands.registerCommand("Score-L2", new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L2));
     NamedCommands.registerCommand("Elevator-L4", new ElevatorSetHeight(m_ElevatorSubsystem, ElevatorHeights.L4));
+    NamedCommands.registerCommand("Elevator-SenseHeight", new ElevatorSetHeight(m_ElevatorSubsystem, ElevatorHeights.SENSE));
+    //NamedCommands.registerCommand("FindReef", new FindReef(drivetrain, m_ShooterSubsystem));
+    NamedCommands.registerCommand("FindReef", findTheReef);
     NamedCommands.registerCommand("DriveUntilTouch", driveUntilTouch);
   }
 
@@ -102,10 +111,12 @@ public class RobotContainer {
 
     //driverController.leftBumper().whileTrue(drivetrain.goToPosition(Positions.TOPMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
     //driverController.rightBumper().whileTrue(drivetrain.goToPosition(Positions.BOTTOMMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
-    driverController.rightBumper().whileTrue(driveUntilTouch);
+    driverController.rightBumper().whileTrue(findTheReef);
+    driverController.leftBumper().whileTrue(findAutoL4);
     //driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
     //driverController.y().whileTrue(driveToPosition);
     //Operator Controller
+    operatorController.back().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.SENSE), m_ElevatorSubsystem));
     operatorController.y().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L4), m_ElevatorSubsystem));
     operatorController.x().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L2), m_ElevatorSubsystem));
     operatorController.b().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.L3), m_ElevatorSubsystem));

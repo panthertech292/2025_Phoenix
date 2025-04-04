@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANdi;
@@ -48,8 +50,8 @@ public class ShooterSubsystem extends SubsystemBase {
     CANdiConfig.DigitalInputs.S2CloseState = S2CloseStateValue.CloseWhenLow;
     shooterCANdi.getConfigurator().apply(CANdiConfig);
   }
-  public boolean reefIsInFrontRobot(){
-    return shooterCANdi.getS1Closed().getValue();
+  public BooleanSupplier reefIsInFrontRobot(){
+    return () -> shooterCANdi.getS1Closed().getValue();
   }
   public boolean coralIsInShooter(){
     return shooterCANdi.getS2Closed().getValue();
@@ -63,7 +65,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Reef Detector", reefIsInFrontRobot());
+    SmartDashboard.putBoolean("Reef Detector", reefIsInFrontRobot().getAsBoolean());
     SmartDashboard.putBoolean("Coral Detector", coralIsInShooter());
     //SmartDashboard.putNumber("Stator Current Upper", upperRollerMotor.getStatorCurrent().getValueAsDouble());
   }
