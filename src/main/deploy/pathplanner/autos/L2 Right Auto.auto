@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "DriveUntilTouch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Score-L2"
           }
         },
@@ -44,6 +50,12 @@
         {
           "type": "named",
           "data": {
+            "name": "DriveUntilTouch"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Score-L2"
           }
         },
@@ -70,6 +82,12 @@
           "type": "path",
           "data": {
             "pathName": "loadToBravo"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveUntilTouch"
           }
         },
         {

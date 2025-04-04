@@ -3,42 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.252561475409835,
-        "y": 1.915
+        "x": 7.276536885245902,
+        "y": 4.361
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.22233939816765,
-        "y": 2.2515849890890522
+        "x": 7.676936880889108,
+        "y": 4.369695135703301
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.442418032786885,
-        "y": 3.07797131147541
+        "x": 5.814036885245901,
+        "y": 4.361
       },
       "prevControl": {
-        "x": 5.651934759476736,
-        "y": 2.941579445012742
+        "x": 5.564038774890133,
+        "y": 4.360027982230011
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Foxtrot"
+      "linkedName": "Hotel"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.6471380471380405,
-      "rotationDegrees": -150.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.25,
+    "maxVelocity": 3.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -150.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "L4 Bottom Paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

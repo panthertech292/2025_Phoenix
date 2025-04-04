@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.S1CloseStateValue;
 import com.ctre.phoenix6.signals.S2CloseStateValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -62,6 +63,8 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Reef Detector", reefIsInFrontRobot());
+    SmartDashboard.putBoolean("Coral Detector", coralIsInShooter());
     //SmartDashboard.putNumber("Stator Current Upper", upperRollerMotor.getStatorCurrent().getValueAsDouble());
   }
 }

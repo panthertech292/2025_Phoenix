@@ -55,8 +55,8 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
   private final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-  private final Command driveUpToReef = drivetrain.applyRequest(() ->
-  robotCentricDrive.withVelocityY(1)).until(drivetrain.againstReef()); // Drive left with negative X (left)
+  private final Command driveUntilTouch = drivetrain.applyRequest(() ->
+  robotCentricDrive.withVelocityY(-0.5)).until(drivetrain.againstReef()); // Drive left with negative X (left)
   
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -78,6 +78,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Score-L4", new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L4));
     NamedCommands.registerCommand("Score-L2", new autoScore(m_ElevatorSubsystem, m_ShooterSubsystem, ElevatorHeights.L2));
     NamedCommands.registerCommand("Elevator-L4", new ElevatorSetHeight(m_ElevatorSubsystem, ElevatorHeights.L4));
+    NamedCommands.registerCommand("DriveUntilTouch", driveUntilTouch);
   }
 
   private void configureBindings() {
@@ -101,7 +102,7 @@ public class RobotContainer {
 
     //driverController.leftBumper().whileTrue(drivetrain.goToPosition(Positions.TOPMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
     //driverController.rightBumper().whileTrue(drivetrain.goToPosition(Positions.BOTTOMMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
-    driverController.rightBumper().whileTrue(driveUpToReef);
+    driverController.rightBumper().whileTrue(driveUntilTouch);
     //driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
     //driverController.y().whileTrue(driveToPosition);
     //Operator Controller
@@ -111,11 +112,14 @@ public class RobotContainer {
     operatorController.a().onTrue(Commands.runOnce(() -> m_ElevatorSubsystem.setElevatorSetPoint(ElevatorHeights.LOAD), m_ElevatorSubsystem));
     operatorController.leftTrigger().whileTrue(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem));
     operatorController.rightTrigger().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.10), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
+    operatorController.leftStick().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(-.10), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
+    operatorController.rightStick().whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.20), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));//.whileTrue(Commands.startEnd(() -> m_ShooterSubsystem.setRollers(.10), () -> m_ShooterSubsystem.setRollers(0), m_ShooterSubsystem));
     operatorController.leftBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, -0.15));
     operatorController.rightBumper().whileTrue(new ElevatorSetSpeed(m_ElevatorSubsystem, 0.15));
-    operatorController.back().whileTrue(Commands.startEnd(() -> m_ClimberSubsystem.setClimbIntake(-.60), () -> m_ClimberSubsystem.setClimbIntake(0), m_ClimberSubsystem));
     operatorController.start().whileTrue(Commands.startEnd(() -> m_ClimberSubsystem.setClimbIntake(.60), () -> m_ClimberSubsystem.setClimbIntake(0), m_ClimberSubsystem));
+    operatorController.povLeft().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, 0.10));
     operatorController.povUp().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, 0.35));
+    operatorController.povRight().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, 0.60));
     operatorController.povDown().whileTrue(new ClimberSetSpeed(m_ClimberSubsystem, -0.35));
 
     drivetrain.registerTelemetry(logger::telemeterize);
