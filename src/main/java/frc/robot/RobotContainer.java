@@ -53,6 +53,10 @@ public class RobotContainer {
     .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+  private final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+  private final Command driveUpToReef = drivetrain.applyRequest(() ->
+  robotCentricDrive.withVelocityY(1)).until(drivetrain.againstReef()); // Drive left with negative X (left)
   
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -95,11 +99,9 @@ public class RobotContainer {
     .withVelocityY(-driverController.getLeftX() * MaxSpeed*0.05) // Drive left with negative X (left)
     .withRotationalRate(-driverController.getRightX() * MaxAngularRate*0.05)));
 
-    //driverController.leftBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.topMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
-    //driverController.rightBumper().whileTrue(drivetrain.driveToPose(coralStationPositions.bottomMid).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
-    driverController.leftBumper().whileTrue(drivetrain.goToPosition(Positions.TOPMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
-    driverController.rightBumper().whileTrue(drivetrain.goToPosition(Positions.BOTTOMMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
-
+    //driverController.leftBumper().whileTrue(drivetrain.goToPosition(Positions.TOPMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
+    //driverController.rightBumper().whileTrue(drivetrain.goToPosition(Positions.BOTTOMMID).alongWith(new Intake(m_ElevatorSubsystem, m_ShooterSubsystem)));
+    driverController.rightBumper().whileTrue(driveUpToReef);
     //driverController.start().onTrue(drivetrain.runOnce(() -> drivetrain.poseToPhoton()));
     //driverController.y().whileTrue(driveToPosition);
     //Operator Controller

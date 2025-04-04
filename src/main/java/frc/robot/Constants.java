@@ -11,6 +11,10 @@ public class Constants {
         public static final int kButtonBoardRightSide = 2;
         public static final int kButtonBoardLeftSide = 3;
     }
+    public static class DriveConstants {
+        public static final int kCANRange = 49;
+        public static final double kCANRangeDistanceOffset = 5.5;
+    }
     public static class ElevatorConstants {
         public static enum ElevatorHeights{DOWN, L1, L2, L3, L4, ALGEE_LOW, ALGEE_HIGH, LOAD};
         //Devices

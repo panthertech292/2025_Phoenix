@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import org.photonvision.EstimatedRobotPose;
@@ -14,6 +15,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -46,6 +48,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PositionConstants;
 import frc.robot.Constants.PositionConstants.BluePositions;
 import frc.robot.Constants.PositionConstants.RedPositions;
@@ -65,6 +68,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Pose2d PhotonPoseFront = new Pose2d();
     private final Field2d m_field = new Field2d(); //TODO: For testing
     private Alliance allianceColor;
+    private CANrange canRange;
 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
@@ -326,6 +330,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         resetPose(PhotonPoseFront);
     }
     public void configPhotonVision(){
+        canRange = new CANrange(DriveConstants.kCANRange);
         SmartDashboard.putData("FieldUse", m_field);
         // Logging callback for current robot pose
         PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {m_field.setRobotPose(pose);});
@@ -377,11 +382,17 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         visionEstFront.ifPresent(est -> {addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, VecBuilder.fill(.7,.7,9999999));});
         visionEstFront.ifPresent(estFront -> {PhotonPoseFront = estFront.estimatedPose.toPose2d();});
     }
+    public double getRange(){
+        return Units.metersToInches(canRange.getDistance().getValueAsDouble());
+    }
+    public BooleanSupplier againstReef(){
+        return () -> (getRange() - DriveConstants.kCANRangeDistanceOffset) < 0.25;
+    }
 
 
     @Override
     public void periodic() {
-        //System.out.println("PHOTON LEFT ANGLE: " + PhotonPoseLeft.getRotation().getDegrees() + PhotonPoseLeft.getX());
+        SmartDashboard.putNumber("Range", getRange());
         updatePhotonOdometry();
         if(PhotonPoseBack != null){
             //System.out.println(PhotonPoseLeft.getX());
